@@ -1,0 +1,103 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  font-family: 'Outfit', sans-serif;
+  overflow: hidden;
+}
+
+/* Fullscreen Hero Image */
+.hero-image-container {
+  background-image: url('i1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+/* Optional dark overlay */
+.overlay {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 1;
+  color: white;
+}
+
+/* Hero Text */
+.hero-text {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -35%);
+  z-index: 2;
+  text-shadow: 1px 1px 8px rgba(0,0,0,0.8);
+}
+
+/* Login Button */
+.bottom-center-button {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.glow-btn {
+  padding: 14px 36px;
+  background: linear-gradient(90deg, #00ffd5, #0099ff);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  box-shadow: 0 0 15px rgba(0,255,255,0.6);
+  transition: all 0.3s ease-in-out;
+}
+
+.glow-btn:hover {
+  box-shadow: 0 0 25px rgba(0,255,255,0.8), 0 0 40px rgba(0,131,255,0.6);
+  transform: scale(1.05);
+}
+
+/* Glassmorphic Navbar */
+.glass-navbar {
+  backdrop-filter: blur(12px);
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.glass-navbar .nav-link {
+  color: #f0f0f0 !important;
+  font-weight: 500;
+  margin-left: 15px;
+  transition: color 0.3s ease;
+}
+
+.glass-navbar .nav-link:hover {
+  color: #00ffd5 !important;
+}
+
+.navbar-brand {
+  font-size: 22px;
+  letter-spacing: 1px;
+}

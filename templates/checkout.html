@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment - TrollyNet.in</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0d;
+            color: #e5e7eb;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: #16161e;
+            border-radius: 1.2rem 1.2rem 0 0;
+            box-shadow: 0 4px 20px 0 #000d, 0 0 6px 2px #027aff22;
+            padding: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            background: linear-gradient(90deg, #fc8c77 0%, #1CF2FF 95%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo::before {
+            content: "🔒";
+            margin-right: 8px;
+            font-size: 1.2rem;
+            filter: drop-shadow(0 2px 6px #1CF2FF44);
+        }
+
+        /* Main Container */
+        .payment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #15161c;
+            border-radius: 1.2rem;
+            overflow: hidden;
+            box-shadow: 0 8px 32px -4px #090a;
+            border: 1.5px solid #232434;
+        }
+
+        .payment-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: #17181f;
+            padding: 2rem;
+            border-right: 1.5px solid #232434;
+        }
+
+        .summary-title {
+            color: #1CF2FF;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .summary-title::before {
+            content: "📋";
+            font-size: 1.1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #232434;
+            color: #bbc5e4;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .item-price {
+            color: #ff9987;
+            font-weight: 600;
+        }
+
+        .total-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #232434;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .grand-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1CF2FF;
+            padding: 1rem;
+            background: #1a1d24;
+            border-radius: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        /* Payment Form */
+        .payment-form {
+            padding: 2rem;
+            background: #15161c;
+        }
+
+        .payment-title {
+            color: #1CF2FF;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .payment-title::before {
+            content: "💳";
+            font-size: 1.1rem;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            margin-bottom: 2rem;
+        }
+
+        .method-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            background: #1a1d24;
+            padding: 0.3rem;
+            border-radius: 0.8rem;
+        }
+
+        .method-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: transparent;
+            color: #bbc5e4;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .method-tab.active {
+            background: linear-gradient(90deg, #fc8c77, #1CF2FF 70%);
+            color: #181b24;
+            font-weight: 600;
+        }
+
+        .method-tab:not(.active):hover {
+            background: #232434;
+            color: #1CF2FF;
+        }
+
+        /* Form Sections */
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1CF2FF;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #1a1d24;
+            color: #fff;
+            border: 1.5px solid #232434;
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #1CF2FF;
+            background: #1f2329;
+            box-shadow: 0 0 0 3px #1cf2ff20;
+        }
+
+        .form-input::placeholder {
+            color: #6b7280;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Card Icons */
+        .card-icons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 20px;
+            background: #232434;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #1CF2FF;
+        }
+
+        /* UPI Section */
+        .upi-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .upi-option {
+            padding: 1rem;
+            background: #1a1d24;
+            border: 1.5px solid #232434;
+            border-radius: 0.8rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .upi-option:hover {
+            border-color: #1CF2FF;
+            background: #1f2329;
+        }
+
+        .upi-option.selected {
+            border-color: #fc8c77;
+            background: #fc8c7710;
+        }
+
+        .upi-logo {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upi-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #bbc5e4;
+        }
+
+        /* Security Features */
+        .security-info {
+            background: #1a1d24;
+            padding: 1rem;
+            border-radius: 0.8rem;
+            margin-bottom: 2rem;
+            border-left: 3px solid #1CF2FF;
+        }
+
+        .security-title {
+            color: #1CF2FF;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .security-title::before {
+            content: "🛡️";
+            font-size: 0.9rem;
+        }
+
+        .security-text {
+            font-size: 0.85rem;
+            color: #9cb0b9;
+            line-height: 1.4;
+        }
+
+        /* Payment Button */
+        .pay-button {
+            width: 100%;
+            background: linear-gradient(90deg, #fc8c77, #1CF2FF 80%);
+            color: #181b24;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 0.8rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px -4px #1CF2FF60;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .pay-button:hover {
+            filter: brightness(1.1) drop-shadow(0 0 8px #1CF2FF70);
+            transform: translateY(-2px);
+        }
+
+        .pay-button:active {
+            transform: translateY(0);
+        }
+
+        .pay-button.loading {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        .pay-button.loading::after {
+            content: "";
+            width: 16px;
+            height: 16px;
+            border: 2px solid #181b24;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Terms and Conditions */
+        .terms {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #232434;
+            text-align: center;
+        }
+
+        .terms-text {
+            font-size: 0.85rem;
+            color: #9cb0b9;
+            line-height: 1.4;
+        }
+
+        .terms-link {
+            color: #1CF2FF;
+            text-decoration: none;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .payment-content {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                border-right: none;
+                border-bottom: 1.5px solid #232434;
+            }
+
+            .method-tabs {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .upi-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Success Animation */
+        .success-check {
+            display: none;
+            color: #4ade80;
+            font-size: 1.2rem;
+            animation: checkmark 0.3s ease-in-out;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Secure Payment Gateway</div>
+        </div>
+
+        <div class="payment-content">
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3 class="summary-title">Order Summary</h3>
+                
+                <div class="order-item">
+                    <span class="item-name">Subtotal</span>
+                    <span class="item-price">₹{{ (amount|float - (amount|float * 0.18)) | round(2) }}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="item-name">GST (18%)</span>
+                    <span class="item-price">₹{{ (amount|float * 0.18) | round(2) }}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="item-name">Processing Fee</span>
+                    <span class="item-price">₹0.00</span>
+                </div>
+
+                <div class="total-section">
+                    <div class="grand-total">
+                        <span>Total Amount</span>
+                        <span>₹{{ amount }}</span>
+                    </div>
+                </div>
+
+                <div class="security-info">
+                    <div class="security-title">Your payment is secure</div>
+                    <div class="security-text">
+                        We use 256-bit SSL encryption to protect your payment information. 
+                        Your card details are never stored on our servers.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="payment-form">
+                <h3 class="payment-title">Choose Payment Method</h3>
+
+                <!-- Payment Method Tabs -->
+                <div class="payment-methods">
+                    <div class="method-tabs">
+                        <button class="method-tab active" onclick="switchMethod('card')">
+                            💳 Card
+                        </button>
+                        <button class="method-tab" onclick="switchMethod('upi')">
+                            📱 UPI
+                        </button>
+                        <button class="method-tab" onclick="switchMethod('netbanking')">
+                            🏦 Net Banking
+                        </button>
+                        <button class="method-tab" onclick="switchMethod('wallet')">
+                            👛 Wallet
+                        </button>
+                    </div>
+
+                    <form id="paymentForm" method="POST" action="/process-payment">
+                        <input type="hidden" name="amount" value="{{ amount }}">
+                        <input type="hidden" name="payment_method" id="paymentMethod" value="card">
+
+                        <!-- Card Payment -->
+                        <div id="card-section" class="form-section active">
+                            <div class="form-group">
+                                <label class="form-label">Card Number</label>
+                                <input type="text" name="card_number" class="form-input" 
+                                       placeholder="1234 5678 9012 3456" maxlength="19" 
+                                       oninput="formatCardNumber(this)">
+                                <div class="card-icons">
+                                    <div class="card-icon">VISA</div>
+                                    <div class="card-icon">MC</div>
+                                    <div class="card-icon">AMEX</div>
+                                    <div class="card-icon">RUPAY</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Cardholder Name</label>
+                                <input type="text" name="cardholder_name" class="form-input" 
+                                       placeholder="John Doe" required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="text" name="expiry" class="form-input" 
+                                           placeholder="MM/YY" maxlength="5" 
+                                           oninput="formatExpiry(this)" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">CVV</label>
+                                    <input type="password" name="cvv" class="form-input" 
+                                           placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- UPI Payment -->
+                        <div id="upi-section" class="form-section">
+                            <div class="upi-options">
+                                <div class="upi-option" onclick="selectUPI('gpay')">
+                                    <div class="upi-logo">🔵</div>
+                                    <div class="upi-name">Google Pay</div>
+                                </div>
+                                <div class="upi-option" onclick="selectUPI('paytm')">
+                                    <div class="upi-logo">🔷</div>
+                                    <div class="upi-name">Paytm</div>
+                                </div>
+                                <div class="upi-option" onclick="selectUPI('phonepe')">
+                                    <div class="upi-logo">🟣</div>
+                                    <div class="upi-name">PhonePe</div>
+                                </div>
+                                <div class="upi-option" onclick="selectUPI('bhim')">
+                                    <div class="upi-logo">🟠</div>
+                                    <div class="upi-name">BHIM UPI</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">UPI ID</label>
+                                <input type="text" name="upi_id" class="form-input" 
+                                       placeholder="username@paytm" id="upiInput">
+                            </div>
+                        </div>
+
+                        <!-- Net Banking -->
+                        <div id="netbanking-section" class="form-section">
+                            <div class="form-group">
+                                <label class="form-label">Select Your Bank</label>
+                                <select name="bank" class="form-input">
+                                    <option value="">Choose your bank</option>
+                                    <option value="sbi">State Bank of India</option>
+                                    <option value="hdfc">HDFC Bank</option>
+                                    <option value="icici">ICICI Bank</option>
+                                    <option value="axis">Axis Bank</option>
+                                    <option value="kotak">Kotak Mahindra Bank</option>
+                                    <option value="pnb">Punjab National Bank</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Wallet -->
+                        <div id="wallet-section" class="form-section">
+                            <div class="upi-options">
+                                <div class="upi-option" onclick="selectWallet('paytm')">
+                                    <div class="upi-logo">💙</div>
+                                    <div class="upi-name">Paytm Wallet</div>
+                                </div>
+                                <div class="upi-option" onclick="selectWallet('mobikwik')">
+                                    <div class="upi-logo">❤️</div>
+                                    <div class="upi-name">Mobikwik</div>
+                                </div>
+                                <div class="upi-option" onclick="selectWallet('freecharge')">
+                                    <div class="upi-logo">💚</div>
+                                    <div class="upi-name">FreeCharge</div>
+                                </div>
+                                <div class="upi-option" onclick="selectWallet('amazonpay')">
+                                    <div class="upi-logo">🧡</div>
+                                    <div class="upi-name">Amazon Pay</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="pay-button" id="payButton">
+                            <span>🔒 Pay ₹{{ amount }}</span>
+                            <span class="success-check" id="successCheck">✅</span>
+                        </button>
+
+                        <div class="terms">
+                            <div class="terms-text">
+                                By proceeding, you agree to our 
+                                <a href="#" class="terms-link">Terms of Service</a> and 
+                                <a href="#" class="terms-link">Privacy Policy</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchMethod(method) {
+            // Update active tab
+            document.querySelectorAll('.method-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(method + '-section').classList.add('active');
+            
+            // Update payment method
+            document.getElementById('paymentMethod').value = method;
+        }
+
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let matches = value.match(/\d{4,16}/g);
+            let match = matches && matches[0] || '';
+            let parts = [];
+
+            for (let i = 0, len = match.length; i < len; i += 4) {
+                parts.push(match.substring(i, i + 4));
+            }
+
+            if (parts.length) {
+                input.value = parts.join(' ');
+            } else {
+                input.value = value;
+            }
+        }
+
+        function formatExpiry(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            input.value = value;
+        }
+
+        function selectUPI(provider) {
+            document.querySelectorAll('.upi-option').forEach(option => option.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            const upiInput = document.getElementById('upiInput');
+            const suffixes = {
+                'gpay': '@okaxis',
+                'paytm': '@paytm',
+                'phonepe': '@ybl',
+                'bhim': '@upi'
+            };
+            
+            upiInput.placeholder = `username${suffixes[provider]}`;
+        }
+
+        function selectWallet(wallet) {
+            document.querySelectorAll('#wallet-section .upi-option').forEach(option => option.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+
+        // Form submission with loading state
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const payButton = document.getElementById('payButton');
+            const successCheck = document.getElementById('successCheck');
+            
+            // Show loading state
+            payButton.classList.add('loading');
+            payButton.innerHTML = '<span>Processing Payment...</span>';
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                payButton.classList.remove('loading');
+                payButton.innerHTML = '<span>Payment Successful</span>';
+                successCheck.style.display = 'inline';
+                
+                // Submit the actual form after animation
+                setTimeout(() => {
+                    this.submit();
+                }, 1000);
+            }, 2000);
+        });
+
+        // Add input validation
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('invalid', function() {
+                this.style.borderColor = '#ff6b6b';
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.style.borderColor = '#1CF2FF';
+                } else {
+                    this.style.borderColor = '#232434';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

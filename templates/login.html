@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrollyNet.in Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 118, 117, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(162, 155, 254, 0.2) 0%, transparent 50%);
+      animation: backgroundShift 20s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%),
+        linear-gradient(-45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
+      background-size: 60px 60px;
+      animation: gridMove 10s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      50% { opacity: 0.8; transform: scale(1.1) rotate(5deg); }
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) translateX(100px) rotate(360deg); opacity: 0; }
+    }
+
+    /* Brand Header */
+    .brand-header {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      z-index: 1000;
+    }
+
+    .brand-logo {
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+      text-decoration: none;
+    }
+
+    /* Login Container */
+    .login-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 420px;
+      padding: 0 2rem;
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header */
+    .login-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .login-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      0% { filter: brightness(1) saturate(1); }
+      100% { filter: brightness(1.2) saturate(1.3); }
+    }
+
+    .login-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    /* Form Styling */
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-label {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      color: white;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Submit Button */
+    .btn-login {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      padding: 1rem;
+      font-weight: 600;
+      color: white;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      position: relative;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .btn-login::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-login:hover::before {
+      left: 100%;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    /* Sign up link */
+    .signup-link {
+      text-align: center;
+      margin-top: 2rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+    }
+
+    .signup-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .signup-link a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transition: width 0.3s ease;
+    }
+
+    .signup-link a:hover {
+      color: #764ba2;
+    }
+
+    .signup-link a:hover::after {
+      width: 100%;
+    }
+
+    /* Input focus effects */
+    .input-group {
+      position: relative;
+    }
+
+    .input-group .form-control:focus + .input-icon {
+      color: #667eea;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      transition: color 0.3s ease;
+      pointer-events: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .login-card {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+      }
+      
+      .brand-header {
+        top: 1rem;
+        left: 1rem;
+      }
+      
+      .brand-logo {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Loading animation for button */
+    .btn-login.loading {
+      pointer-events: none;
+    }
+
+    .btn-login.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top: 2px solid white;
+      border-radius: 50%;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: translateY(-50%) rotate(0deg); }
+      100% { transform: translateY(-50%) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Particles -->
+  <div class="particles">
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+    <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
+  </div>
+
+  <!-- Brand Header -->
+  <div class="brand-header">
+    <a href="#" class="brand-logo">✨ TrollyNet.in</a>
+  </div>
+
+  <!-- Login Container -->
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h1 class="login-title">Welcome</h1>
+        <p class="login-subtitle">Sign in to your account to continue</p>
+      </div>
+
+      <form method="POST" id="loginForm">
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <div class="input-group">
+            <input type="text" name="username" class="form-control" id="username" placeholder="Enter your username" required>
+            <span class="input-icon">🙍🏻‍♂️</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password" required>
+            <span class="input-icon">🔒</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-login" id="loginBtn">
+          Sign In
+        </button>
+
+        
+      </form>
+
+      <div class="signup-link">
+        Don't have an account?
+        <a href="{{ url_for('signup') }}">Create one here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Add loading animation to button on form submit
+    document.getElementById('loginForm').addEventListener('submit', function() {
+      const btn = document.getElementById('loginBtn');
+      btn.classList.add('loading');
+      btn.textContent = 'Signing In...';
+    });
+
+    // Add smooth focus animations
+    document.querySelectorAll('.form-control').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+</body>
+</html>

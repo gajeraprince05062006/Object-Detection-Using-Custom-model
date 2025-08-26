@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrollyNet.in Signup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 118, 117, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(162, 155, 254, 0.2) 0%, transparent 50%);
+      animation: backgroundShift 20s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%),
+        linear-gradient(-45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
+      background-size: 60px 60px;
+      animation: gridMove 10s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      50% { opacity: 0.8; transform: scale(1.1) rotate(5deg); }
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) translateX(100px) rotate(360deg); opacity: 0; }
+    }
+
+    /* Brand Header */
+    .brand-header {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      z-index: 1000;
+    }
+
+    .brand-logo {
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+      text-decoration: none;
+    }
+
+    /* Signup Container */
+    .signup-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 450px;
+      padding: 0 2rem;
+    }
+
+    .signup-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    .signup-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header */
+    .signup-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .signup-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      0% { filter: brightness(1) saturate(1); }
+      100% { filter: brightness(1.2) saturate(1.3); }
+    }
+
+    .signup-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    /* Form Styling */
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-label {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 0.9rem 1rem 0.9rem 3rem;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      color: white;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Input icons */
+    .input-group {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      transition: color 0.3s ease;
+      pointer-events: none;
+    }
+
+    .input-group .form-control:focus + .input-icon {
+      color: #667eea;
+    }
+
+    /* Password strength indicator */
+    .password-strength {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .strength-weak { background: #ff4757; width: 25%; }
+    .strength-fair { background: #ffa502; width: 50%; }
+    .strength-good { background: #2ed573; width: 75%; }
+    .strength-strong { background: #5352ed; width: 100%; }
+
+    /* Submit Button */
+    .btn-signup {
+      background: linear-gradient(135deg, #2ed573, #17c0eb);
+      border: none;
+      padding: 1rem;
+      font-weight: 600;
+      color: white;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(46, 213, 115, 0.4);
+      position: relative;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .btn-signup::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-signup:hover::before {
+      left: 100%;
+    }
+
+    .btn-signup:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(46, 213, 115, 0.6);
+    }
+
+    .btn-signup:active {
+      transform: translateY(0);
+    }
+
+    /* Login link */
+    .login-link {
+      text-align: center;
+      margin-top: 2rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+    }
+
+    .login-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .login-link a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transition: width 0.3s ease;
+    }
+
+    .login-link a:hover {
+      color: #764ba2;
+    }
+
+    .login-link a:hover::after {
+      width: 100%;
+    }
+
+    /* Form validation */
+    .form-control.is-invalid {
+      border-color: #ff4757;
+      box-shadow: 0 0 0 0.2rem rgba(255, 71, 87, 0.25);
+    }
+
+    .form-control.is-valid {
+      border-color: #2ed573;
+      box-shadow: 0 0 0 0.2rem rgba(46, 213, 115, 0.25);
+    }
+
+    .invalid-feedback, .valid-feedback {
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .invalid-feedback {
+      color: #ff4757;
+    }
+
+    .valid-feedback {
+      color: #2ed573;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .signup-card {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .brand-header {
+        top: 1rem;
+        left: 1rem;
+      }
+      
+      .brand-logo {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Loading animation for button */
+    .btn-signup.loading {
+      pointer-events: none;
+    }
+
+    .btn-signup.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top: 2px solid white;
+      border-radius: 50%;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: translateY(-50%) rotate(0deg); }
+      100% { transform: translateY(-50%) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Particles -->
+  <div class="particles">
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+    <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
+  </div>
+
+  <!-- Brand Header -->
+  <div class="brand-header">
+    <a href="#" class="brand-logo">✨ TrollyNet.in</a>
+  </div>
+
+  <!-- Signup Container -->
+  <div class="signup-container">
+    <div class="signup-card">
+      <div class="signup-header">
+        <h1 class="signup-title">Join TrollyNet.in</h1>
+        <p class="signup-subtitle">Create your account and start your journey</p>
+      </div>
+
+      <form method="POST" id="signupForm" novalidate>
+        <div class="form-group">
+          <label for="fullname" class="form-label">Full Name</label>
+          <div class="input-group">
+            <input type="text" name="fullname" class="form-control" id="fullname" placeholder="Enter your full name" required>
+            <span class="input-icon">👤</span>
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <div class="input-group">
+            <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>
+            <span class="input-icon">📧</span>
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <div class="input-group">
+            <input type="text" name="username" class="form-control" id="username" placeholder="Choose a username" required>
+            <span class="input-icon">@</span>
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <input type="password" name="password" class="form-control" id="password" placeholder="Create a strong password" required>
+            <span class="input-icon">🔒</span>
+          </div>
+          <div class="password-strength">
+            <div class="password-strength-bar" id="strengthBar"></div>
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <button type="submit" class="btn btn-signup" id="signupBtn">
+          Create Account
+        </button>
+
+        
+      </form>
+
+      <div class="login-link">
+        Already have an account?
+        <a href="{{ url_for('login') }}">Sign in here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Form validation and animations
+    const form = document.getElementById('signupForm');
+    const inputs = form.querySelectorAll('.form-control');
+    const signupBtn = document.getElementById('signupBtn');
+    const passwordInput = document.getElementById('password');
+    const strengthBar = document.getElementById('strengthBar');
+
+    // Password strength checker
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      const strength = checkPasswordStrength(password);
+      
+      strengthBar.className = 'password-strength-bar';
+      if (password.length > 0) {
+        strengthBar.classList.add(strength.class);
+      }
+    });
+
+    function checkPasswordStrength(password) {
+      let score = 0;
+      if (password.length >= 8) score++;
+      if (/[A-Z]/.test(password)) score++;
+      if (/[0-9]/.test(password)) score++;
+      if (/[^A-Za-z0-9]/.test(password)) score++;
+
+      const strengths = [
+        { class: 'strength-weak', text: 'Weak' },
+        { class: 'strength-fair', text: 'Fair' },
+        { class: 'strength-good', text: 'Good' },
+        { class: 'strength-strong', text: 'Strong' }
+      ];
+
+      return strengths[Math.min(score, 3)];
+    }
+
+    // Real-time validation
+    inputs.forEach(input => {
+      input.addEventListener('blur', validateField);
+      input.addEventListener('input', function() {
+        if (this.classList.contains('is-invalid')) {
+          validateField.call(this);
+        }
+      });
+    });
+
+    function validateField() {
+      const field = this;
+      const value = field.value.trim();
+      const fieldType = field.type;
+      let isValid = true;
+      let message = '';
+
+      // Reset classes
+      field.classList.remove('is-valid', 'is-invalid');
+
+      if (field.required && !value) {
+        isValid = false;
+        message = 'This field is required';
+      } else if (fieldType === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          isValid = false;
+          message = 'Please enter a valid email address';
+        }
+      } else if (field.name === 'username' && value) {
+        if (value.length < 3) {
+          isValid = false;
+          message = 'Username must be at least 3 characters';
+        }
+      } else if (field.name === 'password' && value) {
+        if (value.length < 6) {
+          isValid = false;
+          message = 'Password must be at least 6 characters';
+        }
+      }
+
+      // Apply validation classes and messages
+      if (value) {
+        field.classList.add(isValid ? 'is-valid' : 'is-invalid');
+        const feedback = field.parentElement.nextElementSibling;
+        if (feedback && feedback.classList.contains('invalid-feedback')) {
+          feedback.textContent = message;
+        }
+      }
+
+      return isValid;
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+      let isFormValid = true;
+      inputs.forEach(input => {
+        if (!validateField.call(input)) {
+          isFormValid = false;
+        }
+      });
+
+      if (isFormValid) {
+        // Add loading state
+        signupBtn.classList.add('loading');
+        signupBtn.textContent = 'Creating Account...';
+        
+        // Let the form submit naturally to Flask
+        return true;
+      } else {
+        // Prevent submission if validation fails
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    // Smooth focus animations
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+</body>
+</html>
